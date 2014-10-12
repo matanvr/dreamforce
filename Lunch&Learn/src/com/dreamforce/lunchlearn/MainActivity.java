@@ -1,22 +1,34 @@
 package com.dreamforce.lunchlearn;
 
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.Window;
-
-import com.andtinder.model.CardModel;
-import com.andtinder.view.CardContainer;
-import com.andtinder.view.SimpleCardStackAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
-    /**
-     * This variable is the container that will host our cards
-     */
+
+	    protected abstract Fragment createFragment();
+
+	    @Override
+	    public void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        setContentView(R.layout.activity_fragment);
+	        FragmentManager manager = getSupportFragmentManager();
+	        Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
+
+	        if (fragment == null) {
+	            fragment = createFragment();
+	            manager.beginTransaction()
+	                .add(R.id.fragmentContainer, fragment)
+	                .commit();
+	        }
+	    }
+}
+
+	/*
 	private CardContainer mCardContainer;
 	SimpleCardStackAdapter adapter;
 	int mCounter = 0;
@@ -43,7 +55,9 @@ public class MainActivity extends ActionBarActivity {
            public void OnClickListener() {
                Log.i("Swipeable Cards","I am pressing the card" + adapter.getCardModel(mCounter).getTitle());
                //start Activity 
-               
+               Intent intent = new Intent(MainActivity.this,EventActivity.class);
+               //intent.putExtra("post", item"); make sure its serializable;
+               startActivity(intent);
 
                
            }
@@ -66,5 +80,5 @@ public class MainActivity extends ActionBarActivity {
         adapter.add(cardModel);
 
 		mCardContainer.setAdapter(adapter);
-	}
-}
+	}/*
+
